@@ -7,10 +7,12 @@
       "pieces": [
         "start",
         "flat",
+        "coin",
         "gap",
         "flat",
         "spikes",
         "platform",
+        "coin",
         "stairs",
         "finish"
       ]
@@ -22,9 +24,66 @@
         "spikes",
         "gap",
         "step",
+        "enemy",
+        "coin",
         "spikepit",
         "platform",
         "gap",
+        "flat",
+        "coin",
+        "finish"
+      ]
+    },
+    {
+      "name": "Level 3 - Coin Rush",
+      "pieces": [
+        "start",
+        "flat",
+        "coin",
+        "flat",
+        "spikes",
+        "coin",
+        "flat",
+        "gap",
+        "enemy",
+        "platform",
+        "coin",
+        "stairs",
+        "finish"
+      ]
+    },
+    {
+      "name": "Level 4 - High Ground",
+      "pieces": [
+        "start",
+        "platform",
+        "coin",
+        "flat",
+        "spikes",
+        "step",
+        "coin",
+        "gap",
+        "enemy",
+        "platform",
+        "stairs",
+        "flat",
+        "finish"
+      ]
+    },
+    {
+      "name": "Level 5 - Final Run",
+      "pieces": [
+        "start",
+        "coin",
+        "flat",
+        "spikes",
+        "gap",
+        "coin",
+        "platform",
+        "enemy",
+        "spikepit",
+        "coin",
+        "stairs",
         "flat",
         "finish"
       ]

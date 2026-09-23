@@ -22,6 +22,11 @@ var CONFIG = {
   JUMP_POWER: 15,     // how hard the jump pushes UP. bigger = higher
   GRAVITY: 0.8,       // how hard the world pulls DOWN. bigger = heavier
   MAX_FALL: 16,       // fastest the player is allowed to fall
+  BULLET_SPEED: 10,
+  SHOOT_COOLDOWN: 14,
+  ENEMY_SPEED: 2.2,
+  ENEMY_DASH_SPEED: 7,
+  ENEMY_DASH_DISTANCE: 360,
 
   // --- the player's size ----------------------------------------------
   PLAYER_SIZE: 32,    // the player collides as a 32x32 box

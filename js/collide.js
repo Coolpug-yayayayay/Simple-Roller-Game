@@ -44,6 +44,15 @@ Collide.hitsSpike = function (x, y, width, height) {
   return false;
 };
 
+// Is this box touching a coin?
+Collide.hitsCoin = function (x, y, width, height) {
+  var squares = Collide.squaresUnder(x, y, width, height);
+  for (var i = 0; i < squares.length; i++) {
+    if (Level.isCoin(squares[i].col, squares[i].row)) { return true; }
+  }
+  return false;
+};
+
 // Is this box touching the finish?
 Collide.hitsFinish = function (x, y, width, height) {
   var squares = Collide.squaresUnder(x, y, width, height);
@@ -51,4 +60,9 @@ Collide.hitsFinish = function (x, y, width, height) {
     if (Level.isFinish(squares[i].col, squares[i].row)) { return true; }
   }
   return false;
+};
+
+Collide.overlaps = function (a, b) {
+  return a.x < b.x + b.width && a.x + a.width > b.x &&
+    a.y < b.y + b.height && a.y + a.height > b.y;
 };

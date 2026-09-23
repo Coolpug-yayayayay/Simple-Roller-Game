@@ -34,8 +34,8 @@ Draw.updateCamera = function () {
 Draw.everything = function () {
   var ctx = Draw.ctx;
 
-  // 1. wipe the screen white
-  ctx.fillStyle = "#ffffff";
+  // 1. wipe the screen light blue
+  ctx.fillStyle = "#b9e8ff";
   ctx.fillRect(0, 0, CONFIG.CANVAS_W, CONFIG.CANVAS_H);
 
   // 2. shift everything left so the camera looks like it moved right
@@ -43,6 +43,12 @@ Draw.everything = function () {
   ctx.translate(-Draw.cameraX, 0);
 
   Draw.world();
+  for (var enemyIndex = 0; enemyIndex < Level.enemies.length; enemyIndex++) {
+    if (Level.enemies[enemyIndex].alive) { Draw.enemy(Level.enemies[enemyIndex]); }
+  }
+  for (var bulletIndex = 0; bulletIndex < Game.bullets.length; bulletIndex++) {
+    Draw.bullet(Game.bullets[bulletIndex]);
+  }
   Draw.player();
 
   ctx.restore();
@@ -65,6 +71,7 @@ Draw.world = function () {
 
       if (here === "#") { Draw.block(x, y, size); }
       if (here === "^") { Draw.spike(x, y, size); }
+      if (here === "C") { Draw.coin(x, y, size); }
       if (here === "F") { Draw.finish(x, y, size); }
     }
   }
@@ -73,9 +80,9 @@ Draw.world = function () {
 // A solid block: white inside, black outline.
 Draw.block = function (x, y, size) {
   var ctx = Draw.ctx;
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = "#328bd1";
   ctx.fillRect(x, y, size, size);
-  ctx.strokeStyle = "#000000";
+  ctx.strokeStyle = "#1662a0";
   ctx.lineWidth = CONFIG.LINE_WIDTH;
   ctx.strokeRect(x + CONFIG.LINE_WIDTH / 2,
                  y + CONFIG.LINE_WIDTH / 2,
@@ -86,7 +93,7 @@ Draw.block = function (x, y, size) {
 // A spike: a solid black triangle pointing up.
 Draw.spike = function (x, y, size) {
   var ctx = Draw.ctx;
-  ctx.fillStyle = "#000000";
+  ctx.fillStyle = "#ef476f";
   ctx.beginPath();
   ctx.moveTo(x, y + size);
   ctx.lineTo(x + size / 2, y);
@@ -95,10 +102,28 @@ Draw.spike = function (x, y, size) {
   ctx.fill();
 };
 
+// A coin: a black circle with a little white center.
+Draw.coin = function (x, y, size) {
+  var ctx = Draw.ctx;
+  var radius = size * 0.2;
+  var cx = x + size / 2;
+  var cy = y + size / 2;
+
+  ctx.fillStyle = "#ffd166";
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = "#fff3b0";
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius * 0.35, 0, Math.PI * 2);
+  ctx.fill();
+};
+
 // The finish: a black pole with a flag on it.
 Draw.finish = function (x, y, size) {
   var ctx = Draw.ctx;
-  ctx.fillStyle = "#000000";
+  ctx.fillStyle = "#f7c948";
   ctx.fillRect(x + size / 2 - 2, y, 4, size);
   ctx.beginPath();
   ctx.moveTo(x + size / 2 + 2, y + 4);
@@ -106,6 +131,21 @@ Draw.finish = function (x, y, size) {
   ctx.lineTo(x + size / 2 + 2, y + 20);
   ctx.closePath();
   ctx.fill();
+};
+
+Draw.enemy = function (enemy) {
+  var ctx = Draw.ctx;
+  ctx.fillStyle = enemy.dashing ? "#8b1e3f" : "#d62828";
+  ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(enemy.x + 7, enemy.y + 8, 5, 5);
+  ctx.fillRect(enemy.x + 20, enemy.y + 8, 5, 5);
+};
+
+Draw.bullet = function (bullet) {
+  var ctx = Draw.ctx;
+  ctx.fillStyle = "#263238";
+  ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
 };
 
 // The player: a white circle with a black outline and one off-center
@@ -117,13 +157,16 @@ Draw.player = function () {
   var centerY = Player.y + CONFIG.PLAYER_SIZE / 2;
 
   // the circle
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = "#ffd166";
   ctx.strokeStyle = "#000000";
   ctx.lineWidth = CONFIG.LINE_WIDTH;
   ctx.beginPath();
   ctx.arc(centerX, centerY, r, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
+
+  ctx.fillStyle = "#263238";
+  ctx.fillRect(centerX + 10, centerY - 4, 15, 8);
 
   // the off-center dot. its position depends on how far we have rolled.
   var dotX = centerX + Math.cos(Player.angle) * r * CONFIG.DOT_DISTANCE;

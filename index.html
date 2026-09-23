@@ -10,13 +10,23 @@
 
   <h1>ROLLER</h1>
 
-  <canvas id="game" width="800" height="400"></canvas>
+  <div id="game-shell">
+    <canvas id="game" width="800" height="400"></canvas>
+
+    <div id="game-over-screen" class="hidden">
+      <h2>Game Over</h2>
+      <p id="game-over-score">Current score: 0</p>
+      <p>Press R to restart</p>
+    </div>
+  </div>
 
   <p id="message">Loading...</p>
+  <p id="score">Current: 0   High: 0</p>
 
   <p class="controls">
     LEFT / RIGHT arrow to roll &nbsp;&middot;&nbsp;
-    SPACE or UP arrow to jump &nbsp;&middot;&nbsp;
+    UP arrow or W to jump &nbsp;&middot;&nbsp;
+    SPACE to fire &nbsp;&middot;&nbsp;
     R to restart
   </p>
 

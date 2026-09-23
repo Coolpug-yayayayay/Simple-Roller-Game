@@ -16,7 +16,9 @@ var Level = {
   cols: 0,          // how many columns wide the finished world is
   name: "",
   startX: 0,        // where the player begins, in pixels
-  startY: 0
+  startY: 0,
+  coins: 0,         // total number of coins in this level
+  enemies: []
 };
 
 // --- STEP 1: read the two data files ----------------------------------
@@ -45,6 +47,8 @@ Level.build = function (levelNumber) {
   Level.name = level.name;
   Level.grid = [];
   Level.cols = level.pieces.length * CONFIG.PIECE_COLS;
+  Level.coins = 0;
+  Level.enemies = [];
 
   // start with 10 empty rows
   for (var row = 0; row < CONFIG.ROWS; row++) {
@@ -67,6 +71,8 @@ Level.build = function (levelNumber) {
   }
 
   Level.findStart();
+  Level.countCoins();
+  Level.findEnemies();
 };
 
 // --- STEP 3: find the S and remember where it is ----------------------
@@ -85,6 +91,54 @@ Level.findStart = function () {
   Level.startY = 0;
 };
 
+Level.countCoins = function () {
+  Level.coins = 0;
+  for (var row = 0; row < CONFIG.ROWS; row++) {
+    for (var col = 0; col < Level.cols; col++) {
+      if (Level.charAt(col, row) === "C") {
+        Level.coins++;
+      }
+    }
+  }
+};
+
+Level.findEnemies = function () {
+  for (var row = 0; row < CONFIG.ROWS; row++) {
+    for (var col = 0; col < Level.cols; col++) {
+      if (Level.charAt(col, row) === "E") {
+        Level.enemies.push({
+          x: col * CONFIG.TILE + 4,
+          y: row * CONFIG.TILE + 4,
+          width: CONFIG.PLAYER_SIZE - 8,
+          height: CONFIG.PLAYER_SIZE - 8,
+          vx: 0,
+          dashing: false,
+          alive: true
+        });
+      }
+    }
+  }
+};
+
+Level.collectCoinAt = function (x, y, width, height) {
+  var squares = Collide.squaresUnder(x, y, width, height);
+
+  for (var i = 0; i < squares.length; i++) {
+    var col = squares[i].col;
+    var row = squares[i].row;
+
+    if (Level.charAt(col, row) !== "C") { continue; }
+
+    var chars = Level.grid[row].split("");
+    chars[col] = ".";
+    Level.grid[row] = chars.join("");
+    Game.addScore(1);
+    return true;
+  }
+
+  return false;
+};
+
 // --- ASKING THE WORLD QUESTIONS ---------------------------------------
 // What character is at this grid square?
 Level.charAt = function (col, row) {
@@ -95,6 +149,7 @@ Level.charAt = function (col, row) {
 
 Level.isSolid  = function (col, row) { return Level.charAt(col, row) === "#"; };
 Level.isSpike  = function (col, row) { return Level.charAt(col, row) === "^"; };
+Level.isCoin   = function (col, row) { return Level.charAt(col, row) === "C"; };
 Level.isFinish = function (col, row) { return Level.charAt(col, row) === "F"; };
 
 // How wide is the whole world, in pixels?

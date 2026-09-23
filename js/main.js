@@ -9,8 +9,9 @@
    ===================================================================== */
 
 Draw.setup();
+Game.loadHighScore();
 
 Level.loadData(function () {
-  Game.startLevel(CONFIG.START_LEVEL);
+  Game.startLevel(CONFIG.START_LEVEL, true);
   Game.loop();
 });

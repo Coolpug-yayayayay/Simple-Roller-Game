@@ -72,7 +72,10 @@ Player.update = function () {
     Player.y = Player.y + stepY;
   }
 
-  // --- 6. keep the player inside the left edge of the world -----------
+  // --- 6. collect any coins the player touches ------------------------
+  Level.collectCoinAt(Player.x, Player.y, size, size);
+
+  // --- 7. keep the player inside the left edge of the world -----------
   if (Player.x < 0) { Player.x = 0; }
 };
 
